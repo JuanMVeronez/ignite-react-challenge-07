@@ -54,7 +54,6 @@ const FileInputBase: ForwardRefRenderFunction<
     setImageUrl,
     localImageUrl,
     setLocalImageUrl,
-    setError,
     onChange,
     trigger,
     ...rest
@@ -76,7 +75,6 @@ const FileInputBase: ForwardRefRenderFunction<
 
       setImageUrl('');
       setLocalImageUrl('');
-      setError('image', null);
       setIsSending(true);
 
       await onChange(event);
@@ -84,7 +82,11 @@ const FileInputBase: ForwardRefRenderFunction<
 
       const formData = new FormData();
 
-      formData.append(event.target.name, event.target.files[0]);
+      formData.append(
+        event.target.name,
+        event.target.files[0],
+        event.target.files[0].name
+      );
       formData.append('key', process.env.NEXT_PUBLIC_IMGBB_API_KEY);
 
       const { CancelToken } = axios;
@@ -123,7 +125,7 @@ const FileInputBase: ForwardRefRenderFunction<
         setProgress(0);
       }
     },
-    [onChange, setError, setImageUrl, setLocalImageUrl, trigger, toast]
+    [onChange, setImageUrl, setLocalImageUrl, trigger, toast]
   );
 
   useEffect(() => {
